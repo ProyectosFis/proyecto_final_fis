@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:proyecto_final_fis/controladores_de_vista/home.dart';
-import 'package:proyecto_final_fis/componentes/fade_route.dart';
+import 'package:proyecto_final_fis/components/fade_route.dart';
 import 'package:proyecto_final_fis/constantes.dart';
-import 'package:proyecto_final_fis/componentes/catapultaScrollView.dart';
+import 'package:proyecto_final_fis/components/catapultaScrollView.dart';
 class Configuracion extends StatefulWidget {
   @override
   _ConfiguracionState createState() => _ConfiguracionState();

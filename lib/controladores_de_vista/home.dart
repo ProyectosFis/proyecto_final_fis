@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_fis/controladores_de_vista/favoritos/favoritos.dart';
 import 'package:proyecto_final_fis/constantes.dart';
-import 'package:proyecto_final_fis/componentes/catapultaScrollView.dart';
+import 'package:proyecto_final_fis/components/catapultaScrollView.dart';
 import 'package:proyecto_final_fis/controladores_de_vista/inicio/inicio.dart';
 import 'package:proyecto_final_fis/controladores_de_vista/perfil/perfil.dart';
 

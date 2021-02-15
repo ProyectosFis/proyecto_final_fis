@@ -34,7 +34,8 @@ TextStyle kLabelPrincipalTitleTextStyle = TextStyle(
 
 TextStyle kUnderlineLabelLogin = TextStyle(
   decoration: TextDecoration.underline,
-  fontSize: 10
+  fontSize: 10,
+  fontWeight: FontWeight.w300
 );
 
 TextStyle kLabelTextFormFieldStyle = TextStyle(
