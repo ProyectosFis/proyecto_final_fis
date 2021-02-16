@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../constantes.dart';
 
-class GourmetButton extends StatelessWidget {
-  GourmetButton({
+class IniciarButton extends StatelessWidget {
+  IniciarButton({
     @required this.onPressed,
     this.title,
     this.backgroundColor,
@@ -31,18 +31,18 @@ class GourmetButton extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: kLabelColor,
+              color: Colors.white,
               width: 2
             ),
             gradient: canPush
                 ? LinearGradient(
-                    colors: [kLabelColor, kLabelColor],
+                    colors: [Colors.white, Colors.white],
                     stops: [0.5, 0.8],
                     begin: FractionalOffset.centerLeft,
                     end: FractionalOffset.centerRight,
                   )
                 : LinearGradient(
-                    colors: [Colors.white, Colors.white],
+                    colors: [Colors.transparent, Colors.transparent],
                     stops: [1, 1],
                     begin: FractionalOffset.centerLeft,
                     end: FractionalOffset.centerRight,
@@ -54,7 +54,7 @@ class GourmetButton extends StatelessWidget {
                     height: 15,
                     width: 15,
                     child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      valueColor: AlwaysStoppedAnimation<Color>(kLabelColor),
                       strokeWidth: 3,
                     ),
                   )
@@ -63,8 +63,8 @@ class GourmetButton extends StatelessWidget {
                     style: GoogleFonts.poppins(
                       fontSize: 15,
                       color: canPush
-                        ? Colors.white
-                          :kLabelColor
+                        ?kLabelColor
+                        :Colors.white
                     ),
                   ),
             onPressed: () {

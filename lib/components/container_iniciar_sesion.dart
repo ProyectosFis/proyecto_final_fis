@@ -53,7 +53,7 @@ class ContainerIniciarSesion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 63,
+      height: 50,
       decoration: BoxDecoration(
           borderRadius: kRadiusAll, border: Border.all(color: kWhiteColor)),
       child: Center(

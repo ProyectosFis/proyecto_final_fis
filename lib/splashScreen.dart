@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
+
 import 'constantes.dart';
 import 'controladores_de_vista/Registro/iniciar_sesion.dart';
 import 'package:flutter/material.dart';
@@ -42,8 +44,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   void _onShowLogin() {
     if(mounted){
-      Navigator.of(context).pushReplacement(IniciarSesion.route());
-    }
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (context) => IniciarSesion(),
+        ),
+      );    }
   }
 
   @override
@@ -54,12 +60,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Center(
-            child: Padding(
-              padding: const EdgeInsets.all(40.0),
-              child: Image(
-                image: AssetImage(
-                  'imagenes/yourmetlogo.png'
-                ),
+            child: Image(
+              image: AssetImage(
+                'imagenes/splash.jpg',
               ),
             ),
           ),

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="app.fis.proyecto_final_fis">
    <application
-        android:label="proyecto_final_fis"
+        android:label="Gourmet"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
