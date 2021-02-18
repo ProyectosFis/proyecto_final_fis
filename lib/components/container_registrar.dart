@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:proyecto_final_fis/constantes.dart';
+import 'package:proyecto_final_fis/config/constantes.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // ignore: must_be_immutable

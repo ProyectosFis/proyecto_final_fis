@@ -1,17 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_admin/firebase_admin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:proyecto_final_fis/components/gourmet_button.dart';
-import 'package:proyecto_final_fis/constantes.dart';
+import 'package:proyecto_final_fis/config/config.dart';
+import 'package:proyecto_final_fis/config/constants/user_constants.dart';
+import 'package:proyecto_final_fis/config/firebase/auth/authentication.dart';
+import 'package:proyecto_final_fis/config/constantes.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:proyecto_final_fis/components/catapultaScrollView.dart';
 import 'package:proyecto_final_fis/components/container_registrar.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:proyecto_final_fis/config/firebase/auth/authentication.dart';
+import 'package:flutter/services.dart';
+
+import '../home_screen.dart';
 
 class CrearCuenta extends StatefulWidget {
   @override
@@ -19,16 +22,14 @@ class CrearCuenta extends StatefulWidget {
 }
 
 class _CrearCuentaState extends State<CrearCuenta> {
-  PanelController _pc = PanelController();
-
   /// Variables registro
   String name = "";
   String email = "";
   String password = "";
   String phoneNumber = "";
 
-  /// Variables de la interfaz
-  bool isRegisteringFirst = true; // Evalua que mostrar en el registro
+  ///
+  bool isLoadingBtn = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,6 @@ class _CrearCuentaState extends State<CrearCuenta> {
             height: MediaQuery.of(context).size.height - kToolbarHeight,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
-
               children: <Widget>[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -71,6 +71,8 @@ class _CrearCuentaState extends State<CrearCuenta> {
                   title: "Nombre Completo",
                   icon: Icons.perm_identity_outlined,
                   placeholder: "Juan Caro",
+                  keyboardType: TextInputType.name,
+                  textCapitalization: TextCapitalization.words,
                   onChanged: (text) {
                     setState(() {
                       name = text;
@@ -82,6 +84,7 @@ class _CrearCuentaState extends State<CrearCuenta> {
                   icon: Icons.email_outlined,
                   keyboardType: TextInputType.emailAddress,
                   placeholder: "correo@gourmet.com",
+
                   onChanged: (text) {
                     setState(() {
                       email = text;
@@ -103,6 +106,8 @@ class _CrearCuentaState extends State<CrearCuenta> {
                   title: "Celular",
                   icon: Icons.phone_outlined,
                   placeholder: "321 1234567",
+                  keyboardType: TextInputType.number,
+
                   onChanged: (text) {
                     setState(() {
                       phoneNumber = text;
@@ -115,22 +120,20 @@ class _CrearCuentaState extends State<CrearCuenta> {
                   child: GourmetButton(
                     onPressed: () {
                       if (_canPush()) {
-                        setState(() {
-                          isRegisteringFirst = false;
-                        });
+                        _registerUser();
                       } else {
                         Alert(
                             context: context,
                             title: "Crear cuenta",
-                            desc: "Por favor, rellena los campos para continuar.",
+                            desc:
+                                "Por favor, rellena los campos para continuar.",
                             buttons: [
                               DialogButton(
-                                child: Text(
-                                  "Ok",
-                                  style: GoogleFonts.poppins(
-                                    textStyle: TextStyle(color: Colors.white, fontSize: 20),
-                                  )
-                                ),
+                                child: Text("Ok",
+                                    style: GoogleFonts.poppins(
+                                      textStyle: TextStyle(
+                                          color: Colors.white, fontSize: 20),
+                                    )),
                                 onPressed: () => Navigator.pop(context),
                                 width: 120,
                                 color: kLabelColor,
@@ -139,6 +142,7 @@ class _CrearCuentaState extends State<CrearCuenta> {
                       }
                     },
                     canPush: _canPush(),
+                    isLoading: isLoadingBtn,
                   ),
                 )
               ],
@@ -152,16 +156,19 @@ class _CrearCuentaState extends State<CrearCuenta> {
   bool _canPush() {
     return name != "" && email != "" && password != "" && phoneNumber != "";
   }
+
   /// back
   void _registerUser() {
     print("⏳ REGISTRARÉ USER");
-
+    setState(() {
+      isLoadingBtn = true;
+    });
     Auth().signUp(email, password).then((userId) async {
       Map<String, dynamic> userMap = {
         "name": name,
         "email": email,
         "isAdmin": false,
-
+        "phoneNumber": phoneNumber
       };
 
       FirebaseUser firebaseUser = await Auth().getCurrentUser();
@@ -177,13 +184,14 @@ class _CrearCuentaState extends State<CrearCuenta> {
           user.id = userDoc.documentID;
           user.name = userDoc.data["name"];
           user.email = userDoc.data['email'];
-          user.roles = UserRoles(isAdmin: false, isMerchant: false);
+          user.isAdmin = userDoc.data['isAdmin'];
+          user.phoneNumber = userDoc.data["phoneNumber"];
 
           print("✔️ USER DESCARGADO");
           Navigator.push(
             context,
             CupertinoPageRoute(
-              builder: (context) => NavScreen(index: 0),
+              builder: (context) => HomeScreen(),
             ),
           );
           setState(() {

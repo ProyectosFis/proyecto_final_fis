@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:proyecto_final_fis/screens/favoritos/restaurante_premium.dart';
 import 'package:proyecto_final_fis/components/fade_route.dart';
-import 'package:proyecto_final_fis/constantes.dart';
+import 'package:proyecto_final_fis/config/constantes.dart';
 
 class Favoritos extends StatefulWidget {
   @override

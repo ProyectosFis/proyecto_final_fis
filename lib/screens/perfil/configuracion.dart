@@ -1,134 +1,110 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:proyecto_final_fis/screens/home.dart';
-import 'package:proyecto_final_fis/components/fade_route.dart';
-import 'package:proyecto_final_fis/constantes.dart';
+import 'package:proyecto_final_fis/config/constants/user_constants.dart';
+import 'package:proyecto_final_fis/config/firebase/auth/authentication.dart';
+import 'package:proyecto_final_fis/config/firebase/auth/handles.dart';
+import 'package:proyecto_final_fis/config/constantes.dart';
 import 'package:proyecto_final_fis/components/catapultaScrollView.dart';
+import 'package:proyecto_final_fis/model/users/user_model.dart';
+import 'package:proyecto_final_fis/screens/registro/iniciar_sesion.dart';
+
 class Configuracion extends StatefulWidget {
   @override
   _ConfiguracionState createState() => _ConfiguracionState();
 }
 
 class _ConfiguracionState extends State<Configuracion> {
-
-  nextRoute()  {
-
-    Navigator.push(
-      context,
-      FadeRoute(
-          page:  PaginaPrincipal()
-
-      ),
-    );
-  }
-  principalRoute()  {
-
-    cerrarSesion();
-  }
-
-  void cerrarSesion() {
-    if (mounted) {
-      Navigator.of(context).pushNamedAndRemoveUntil('/screen4', (Route<dynamic> route) => false);
-    }
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: kWhiteColor,
         centerTitle: true,
-        elevation: 1,
-        title: Stack(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  'Configuración',
-                  style: kTituloRegistrarUsuario,
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      height: 20,
-                      width: 15,
-                      child: GestureDetector(
-                          onTap: (){
-                            nextRoute();
-                          },
-                          child: Image(
-                            fit: BoxFit.fill,
-                            image: AssetImage(
-                                'imagenes/volver.png'
-                            ),
-                          )
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            )
-          ],
+        elevation: 0,
+        leading: CupertinoNavigationBarBackButton(
+          color: kLabelColor,
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-
+        title: Text(
+          'Configuración',
+          style: kTituloRegistrarUsuario,
+        ),
       ),
       body: CatapultaScrollView(
         child: Column(
-          children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Container(
-                  height: 100,
-                  width: 375,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          SizedBox(
-                            width: 26,
-                          ),
-                          GestureDetector(
-                            onTap: (){
-                              principalRoute();
-
-                            },
-                            child: Text(
-                              'Cerrar Sesión',
-                              style: GoogleFonts.poppins(
-                                textStyle: kLabelCerrarSesion
-                              ),
-                            )
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
+          children: [
+            Container(
+              height: 1,
+              width: MediaQuery.of(context).size.width,
+              color: Colors.black.withOpacity(0.1),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: CupertinoButton(
+                onPressed: () {
+                  _showSignOutAlert();
+                },
+                child: Text(
+                  'Cerrar Sesión',
+                  style: GoogleFonts.poppins(textStyle: kLabelCerrarSesion),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Container(
-                      height: 1,
-                      color: kBlackColor.withOpacity(0.1),
-                    )
-                  ],
-                )
-              ],
-            )
+              ),
+            ),
+            Container(
+              height: 1,
+              width: MediaQuery.of(context).size.width,
+              color: Colors.black.withOpacity(0.1),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void _showSignOutAlert() {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) => CupertinoActionSheet(
+        title: Text("¿Quieres cerrar sesión?"),
+        actions: <Widget>[
+          CupertinoActionSheetAction(
+            child: Text("Cerrar sesión"),
+            isDestructiveAction: true,
+            onPressed: () {
+              _signOutUser();
+            },
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          child: Text("Volver"),
+          isDefaultAction: true,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+    );
+  }
+
+  void _signOutUser() async {
+    print("⏳ CERRARÉ SESIÓN");
+    Auth().signOut().then((r) {
+      print("✔️ SESIÓN CERRADA");
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (context) => IniciarSesion(),
+        ),
+      );
+      user = User();
+    }).catchError((e) {
+      print("💩️ ERROR AL CERRAR SESIÓN: $e");
+      handleSignOutError(context);
+    });
   }
 }

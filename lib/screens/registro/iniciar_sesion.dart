@@ -1,10 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/services.dart';
 import 'package:proyecto_final_fis/components/gourmet_button.dart';
-import 'package:proyecto_final_fis/screens/Registro/crear_cuenta.dart';
-import 'package:proyecto_final_fis/screens/home.dart';
-import 'package:proyecto_final_fis/constantes.dart';
+import 'package:proyecto_final_fis/config/config.dart';
+import 'package:proyecto_final_fis/config/constants/user_constants.dart';
+import 'package:proyecto_final_fis/config/firebase/auth/authentication.dart';
+import 'package:proyecto_final_fis/screens/registro/crear_cuenta.dart';
+import 'package:proyecto_final_fis/screens/home_screen.dart';
+import 'package:proyecto_final_fis/config/constantes.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:proyecto_final_fis/components/catapultaScrollView.dart';
 import 'package:proyecto_final_fis/components/container_registrar.dart';
@@ -20,11 +25,11 @@ class _IniciarSesionState extends State<IniciarSesion> {
   PanelController _pc = PanelController();
 
   /// Variables inicio de sesión
-  String emailLoginIn = "";
-  String passwordLoginIn = "";
+  String email = "";
+  String password = "";
+  ///
+  bool isLoadingBtn = false;
 
-  /// Variables de la interfaz
-  bool isRegisteringFirst = true; // Evalua que mostrar en el registro
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +68,7 @@ class _IniciarSesionState extends State<IniciarSesion> {
                   placeholder: 'E-mail',
                   onChanged: (text) {
                     setState(() {
-                      emailLoginIn = text;
+                      email = text;
                     });
                   },
                 ),
@@ -74,7 +79,7 @@ class _IniciarSesionState extends State<IniciarSesion> {
                   placeholder: 'Contraseña',
                   onChanged: (text) {
                     setState(() {
-                      passwordLoginIn = text;
+                      password = text;
                     });
                   },
                   isPassword: true,
@@ -85,12 +90,7 @@ class _IniciarSesionState extends State<IniciarSesion> {
                   child: GourmetButton(
                     onPressed: () {
                       if(_canPush()){
-                        Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => PaginaPrincipal(),
-                          ),
-                        );
+                        _loginUser();
                       }else{
                         Alert(
                             context: context,
@@ -111,6 +111,7 @@ class _IniciarSesionState extends State<IniciarSesion> {
                       }
                     },
                     canPush: _canPush(),
+                    isLoading: isLoadingBtn,
                   ),
                 ),
                 CupertinoButton(
@@ -160,6 +161,51 @@ class _IniciarSesionState extends State<IniciarSesion> {
   }
 
   bool _canPush() {
-    return emailLoginIn != "" && passwordLoginIn != "";
+    return email != "" && password != "";
+  }
+
+  void _loginUser() {
+    print("⏳ INICIARÉ SESIÓN");
+    setState(() {
+      isLoadingBtn = true;
+    });
+
+    Auth().signIn(email, password).then((firebaseUser) async {
+      Firestore.instance
+          .document("users/${firebaseUser?.uid}")
+          .get()
+          .then((userDoc) {
+        user.id = userDoc.documentID;
+        user.name = userDoc.data["name"];
+        user.email = userDoc.data['email'];
+        user.isAdmin = userDoc.data['isAdmin'];
+        user.phoneNumber = userDoc.data["phoneNumber"];
+
+
+        print("✔️ USER DESCARGADO");
+        Navigator.push(
+          context,
+          CupertinoPageRoute(
+            builder: (context) => HomeScreen(),
+          ),
+        );
+        
+        setState(() {
+          isLoadingBtn = false;
+        });
+      }).catchError((e) {
+        print("💩 ERROR AL OBTENER USUARIO: $e");
+      });
+
+      print("✔️ SESIÓN INICIADA");
+    }).catchError((e) {
+      print("💩️ ERROR AL INICIAR SESIÓN: $e");
+      if (e is PlatformException) {
+        handleSignInError(context, e.code);
+      }
+      setState(() {
+        isLoadingBtn = false;
+      });
+    });
   }
 }

@@ -7,8 +7,7 @@ class User {
   String email; // Email del usuario
   String phoneNumber; // Celular del usuario
   String profilePictureURL; // Foto de screens.perfil del usuario
-  String pushToken; // Token para notificaciones push
-  bool isdmin; // Determina si el usuario es administrador
+  bool isAdmin; // Determina si el usuario es administrador
 
   User(
       {this.id,
@@ -16,7 +15,7 @@ class User {
       this.email,
       this.profilePictureURL,
       this.phoneNumber,
-      this.pushToken});
+      this.isAdmin});
 }
 
 

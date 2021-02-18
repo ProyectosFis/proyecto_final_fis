@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:proyecto_final_fis/screens/home.dart';
+import 'package:proyecto_final_fis/screens/home_screen.dart';
 import 'package:proyecto_final_fis/components/filtro_container.dart';
 import 'package:proyecto_final_fis/components/fade_route.dart';
-import 'package:proyecto_final_fis/constantes.dart';
+import 'package:proyecto_final_fis/config/constantes.dart';
 import 'package:proyecto_final_fis/components/catapultaScrollView.dart';
 
 
@@ -20,7 +20,7 @@ class _FiltrosState extends State<Filtros> {
     Navigator.push(
       context,
       FadeRoute(
-          page:  PaginaPrincipal()
+          page:  HomeScreen()
       ),
     );
   }
