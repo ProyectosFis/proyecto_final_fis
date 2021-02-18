@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_fis/components/catapultaScrollView.dart';
-import 'package:proyecto_final_fis/controladores_de_vista/inicio/filtros.dart';
-import 'package:proyecto_final_fis/controladores_de_vista/favoritos/restaurante_premium.dart';
 import 'package:proyecto_final_fis/components/caratula_restaurante.dart';
 import 'package:proyecto_final_fis/components/fade_route.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:proyecto_final_fis/constantes.dart';
-import 'package:proyecto_final_fis/controladores_de_vista/home.dart';
+import 'package:proyecto_final_fis/screens/favoritos/restaurante_premium.dart';
+import 'package:proyecto_final_fis/screens/inicio/filtros.dart';
 
 class Buscar extends StatefulWidget {
   @override

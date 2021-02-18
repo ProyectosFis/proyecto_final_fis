@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "600067038172",
+    "project_id": "gourmet-39816",
+    "storage_bucket": "gourmet-39816.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:600067038172:android:8f28359044e2d127418d19",
+        "android_client_info": {
+          "package_name": "app.fis.proyecto_final_fis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "600067038172-dr9157ck198qf1qfn69qtgorhatr220g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.fis.proyecto_final_fis",
+            "certificate_hash": "c2754159b4779c12a5a555974c4154d8cff756ce"
+          }
+        },
+        {
+          "client_id": "600067038172-8h7csr768pknqdncd2og9jk07ksmu86a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXDQKi34f8ajOnc66HKgY5wRaC0MRtoNc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "600067038172-8h7csr768pknqdncd2og9jk07ksmu86a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 
 import 'constantes.dart';
-import 'controladores_de_vista/Registro/iniciar_sesion.dart';
+import 'screens/Registro/iniciar_sesion.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {

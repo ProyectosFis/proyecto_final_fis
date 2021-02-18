@@ -1,16 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_admin/firebase_admin.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:proyecto_final_fis/components/gourmet_button.dart';
-import 'package:proyecto_final_fis/components/iniciar_button.dart';
-import 'package:proyecto_final_fis/controladores_de_vista/home.dart';
 import 'package:proyecto_final_fis/constantes.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:proyecto_final_fis/components/catapultaScrollView.dart';
-import 'package:proyecto_final_fis/components/container_iniciar_sesion.dart';
 import 'package:proyecto_final_fis/components/container_registrar.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:proyecto_final_fis/config/firebase/auth/authentication.dart';
 
 class CrearCuenta extends StatefulWidget {
   @override
@@ -150,5 +151,57 @@ class _CrearCuentaState extends State<CrearCuenta> {
 
   bool _canPush() {
     return name != "" && email != "" && password != "" && phoneNumber != "";
+  }
+  /// back
+  void _registerUser() {
+    print("⏳ REGISTRARÉ USER");
+
+    Auth().signUp(email, password).then((userId) async {
+      Map<String, dynamic> userMap = {
+        "name": name,
+        "email": email,
+        "isAdmin": false,
+
+      };
+
+      FirebaseUser firebaseUser = await Auth().getCurrentUser();
+      Firestore.instance
+          .collection("users")
+          .document(userId)
+          .setData(userMap)
+          .then((r) {
+        Firestore.instance
+            .document("users/${firebaseUser?.uid}")
+            .get()
+            .then((userDoc) {
+          user.id = userDoc.documentID;
+          user.name = userDoc.data["name"];
+          user.email = userDoc.data['email'];
+          user.roles = UserRoles(isAdmin: false, isMerchant: false);
+
+          print("✔️ USER DESCARGADO");
+          Navigator.push(
+            context,
+            CupertinoPageRoute(
+              builder: (context) => NavScreen(index: 0),
+            ),
+          );
+          setState(() {
+            isLoadingBtn = false;
+          });
+        }).catchError((e) {
+          print("💩 ERROR AL OBTENER USUARIO: $e");
+        });
+        print("✔️️ USER REGISTRADO");
+      });
+    }).catchError((e) {
+      print("💩️ ERROR AL REGISTRARSE: $e");
+      if (e is PlatformException) {
+        handleSignUpError(context, e.code);
+      }
+      setState(() {
+        isLoadingBtn = false;
+      });
+    });
   }
 }
